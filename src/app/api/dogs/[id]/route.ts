@@ -3,13 +3,17 @@ import { connectDB } from "@/lib/mongodb";
 import { DogModel } from "@/lib/models/dog.model";
 import type { Dog } from "@/lib/models/dog.model";
 
+type Context = {
+    params: Promise<{ id: string }>;
+};
+
 export async function GET(
     _: Request,
-    context: { params: { id: string } }
+    { params }: Context
 ) {
     await connectDB();
 
-    const { id } = await context.params;
+    const { id } = await params;
     const dog = await DogModel.findById(id);
 
     if (!dog) {
@@ -24,11 +28,11 @@ export async function GET(
 
 export async function PUT(
     req: Request,
-    context: { params: { id: string } }
+    { params }: Context
 ) {
     await connectDB();
 
-    const { id } = await context.params;
+    const { id } = await params;
     const body: Partial<Dog> = await req.json();
 
     const dog = await DogModel.findByIdAndUpdate(
@@ -49,11 +53,11 @@ export async function PUT(
 
 export async function DELETE(
     _: Request,
-    context: { params: { id: string } }
+    { params }: Context
 ) {
     await connectDB();
 
-    const { id } = await context.params;
+    const { id } = await params;
     const dog = await DogModel.findByIdAndDelete(id);
 
     if (!dog) {
