@@ -11,6 +11,7 @@ import { UserRoleModel } from '@/lib/models/user-role.model';
 import type { UserRole } from '@/lib/models/user-role.model';
 
 export const authOptions: NextAuthOptions = {
+    secret: process.env.NEXTAUTH_SECRET,
     session: {
         strategy: 'jwt',
     },
