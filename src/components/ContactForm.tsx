@@ -28,23 +28,28 @@ export function ContactForm() {
         setServerMailResponse('');
 
         try {
-            const res = await fetch('/api/contact', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData),
-            });
+            const message = t('email.message', formData);
+            const encodedMessage = encodeURIComponent(message);
+            const phoneNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER!;
+            window.open(`https://wa.me/${phoneNumber.replaceAll(' ', '')}?text=${encodedMessage}`, '_blank');
 
-            if (res.ok) {
-                const responseData = await res.json();
-                setSubmitStatus('success');
-                setServerMailResponse(responseData?.message);
-            } else {
-                const errorData = await res.json();
-                setSubmitStatus('error');
-                setServerMailResponse(errorData?.error || 'Une erreur inattendue est survenue.');
-            }
+            // const res = await fetch('/api/contact', {
+            //     method: 'POST',
+            //     headers: {
+            //         'Content-Type': 'application/json',
+            //     },
+            //     body: JSON.stringify(formData),
+            // });
+
+            // if (res.ok) {
+            //     const responseData = await res.json();
+            //     setSubmitStatus('success');
+            //     setServerMailResponse(responseData?.message);
+            // } else {
+            //     const errorData = await res.json();
+            //     setSubmitStatus('error');
+            //     setServerMailResponse(errorData?.error || 'Une erreur inattendue est survenue.');
+            // }
         } catch(error) {
             console.error(error);
             setSubmitStatus('error');

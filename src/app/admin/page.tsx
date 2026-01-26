@@ -367,7 +367,7 @@ const Admin = () => {
                                             </TableCell>
                                             <TableCell>{dog.breed}</TableCell>
                                             <TableCell>{dog.age_months} {t('dogs.months')}</TableCell>
-                                            <TableCell>${dog.price}</TableCell>
+                                            <TableCell>€{dog.price}</TableCell>
                                             <TableCell>{t(`dogs.${dog.status}`)}</TableCell>
                                             <TableCell className="text-right">
                                                 <div className="flex justify-end gap-2">

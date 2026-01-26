@@ -77,6 +77,14 @@ const resources = {
             whatsapp: {
                 message: 'Hello! I am interested in adopting {{name}} ({{breed}}). I would like to learn more about this puppy.',
             },
+            // email
+            email: {
+                message: `
+                    name: *{{name}}*, email: *{{email}}*, phone: *{{phone}}*
+                    subject: *{{subject}}*
+                    message: *{{message}}*
+                `,
+            },
             // Contact Form
             contact: {
                 title: 'Contact Us',
@@ -240,6 +248,14 @@ const resources = {
             // WhatsApp
             whatsapp: {
                 message: "Bonjour ! Je suis intéressé(e) par l'adoption de {{name}} ({{breed}}). J'aimerais en savoir plus sur ce chiot.",
+            },
+            // email
+            email: {
+                message: `
+                    name: *{{name}}*, email: *{{email}}*, phone: *{{phone}}*
+                    subject: *{{subject}}*
+                    message: *{{message}}*
+                `,
             },
             // Contact Form
             contact: {
