@@ -68,7 +68,7 @@ const Login = () => {
             });
             return;
         }
-        router.push(res.url ?? '/admin');
+        router.push('/admin');
     };
 
     return (
