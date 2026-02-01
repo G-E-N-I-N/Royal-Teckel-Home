@@ -6,56 +6,46 @@ if (!MONGODB_URI) {
     throw new Error("MONGODB_URI non défini");
 }
 
-class Database {
-    private connection: typeof mongoose | null = null;
+// 👇 cache global (important pour Next.js)
+let cached = global.mongoose as {
+    conn: typeof mongoose | null;
+    promise: Promise<typeof mongoose> | null;
+};
 
-    async connect() {
-        if (this.connection) return this.connection;
-
-        try {
-            const options: mongoose.ConnectOptions = {
-                maxPoolSize: 10,
-                serverSelectionTimeoutMS: 30000,
-                socketTimeoutMS: 60000,
-                bufferCommands: false,
-            };
-
-            this.connection = await mongoose.connect(MONGODB_URI!, options);
-
-            mongoose.connection.on("error", (err) => {
-                console.error("Erreur MongoDB:", err);
-            });
-
-            mongoose.connection.on("disconnected", () => {
-                console.log("MongoDB déconnecté");
-            });
-
-            console.log("Connecté à MongoDB");
-
-            return this.connection;
-        } catch (error) {
-            console.error("Erreur de connexion MongoDB:", error);
-            throw error;
-        }
-    }
-
-    async disconnect() {
-        if (!this.connection) return;
-        try {
-            await mongoose.connection.close();
-            this.connection = null;
-            console.log("MongoDB déconnecté");
-        } catch (error) {
-            console.error("Erreur lors de la fermeture de MongoDB:", error);
-        }
-    }
-
-    isConnected(): boolean {
-        return mongoose.connection.readyState === 1;
-    }
+if (!cached) {
+    cached = global.mongoose = { conn: null, promise: null };
 }
 
 export async function connectDB() {
-    const database = new Database();
-    return await database.connect();
+    if (cached.conn) {
+        return cached.conn;
+    }
+
+    if (!cached.promise) {
+        const options: mongoose.ConnectOptions = {
+            maxPoolSize: 10,
+            serverSelectionTimeoutMS: 30000,
+            socketTimeoutMS: 60000,
+            bufferCommands: false,
+        };
+
+        cached.promise = mongoose.connect(MONGODB_URI!, options);
+    }
+
+    cached.conn = await cached.promise;
+
+    // ✅ listeners ajoutés UNE SEULE FOIS
+    if (mongoose.connection.listenerCount("error") === 0) {
+        mongoose.connection.on("error", (err) => {
+            console.error("Erreur MongoDB:", err);
+        });
+
+        mongoose.connection.on("disconnected", () => {
+            console.warn("MongoDB déconnecté");
+        });
+
+        console.log("Connecté à MongoDB");
+    }
+
+    return cached.conn;
 }
