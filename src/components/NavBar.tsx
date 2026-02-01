@@ -4,6 +4,7 @@ import "@/i18n";
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
+import Image from "next/image";
 import { motion } from 'framer-motion';
 import { Dog, Menu, X, Sun, Moon, Globe } from 'lucide-react';
 import { useState } from 'react';
@@ -13,6 +14,7 @@ import { useSession, signOut } from 'next-auth/react'
 
 export function Navbar() {
     const { t, i18n } = useTranslation();
+    const currentLang = i18n.language || 'fr';
     const pathname = usePathname() || '/';
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const { theme, setTheme, resolvedTheme } = useTheme();
@@ -82,10 +84,16 @@ export function Navbar() {
                             size="icon"
                             onClick={toggleLanguage}
                             className="hidden sm:flex"
-                        >
-                            <Globe className="h-5 w-5" />
-                            <span className="sr-only">Toggle language</span>
-                        </Button>
+                            aria-label="Change language"
+                            >
+                            <Image
+                                src={currentLang === 'fr' ? '/flags/fr.svg' : '/flags/us.svg'}
+                                alt={currentLang === 'fr' ? 'Langue française' : 'English language'}
+                                width={24}
+                                height={24}
+                                className="rounded-sm w-auto h-auto"
+                            />
+                            </Button>
 
                         {/* Theme Toggle */}
                         <Button variant="ghost" size="sm" onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}>
@@ -138,10 +146,21 @@ export function Navbar() {
                             </Link>
                         ))}
                         <div className="flex items-center gap-4 pt-4 border-t border-border">
-                            <Button variant="ghost" size="sm" onClick={toggleLanguage}>
-                                <Globe className="h-4 w-4 mr-2" />
-                                {i18n.language === 'fr' ? 'EN' : 'FR'}
-                            </Button>
+                            <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={toggleLanguage}
+                                aria-label="Change language"
+                                >
+                                <Image
+                                    src={currentLang === 'fr' ? '/flags/fr.svg' : '/flags/us.svg'}
+                                    alt={currentLang === 'fr' ? 'Langue française' : 'English language'}
+                                    width={20}
+                                    height={20}
+                                    className="rounded-sm mr-2 w-auto h-auto"
+                                />
+                                {currentLang === 'fr' ? 'FR' : 'EN'}
+                                </Button>
                             <Button variant="ghost" size="sm" onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}>
                                 {resolvedTheme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
                             </Button>

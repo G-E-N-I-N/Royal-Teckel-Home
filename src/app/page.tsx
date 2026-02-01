@@ -41,6 +41,44 @@ const Home = () => {
 
   return (
     <div>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "LocalBusiness",
+            name: "Royal Teckel Home",
+            description:
+              "Élevage de teckels élevés avec amour, socialisés et prêts à rejoindre des familles responsables.",
+            url: "https://royal-teckel-home.vercel.app/",
+            logo: "https://royal-teckel-home.vercel.app/hero-dog1.jpg",
+            image: "https://royal-teckel-home.vercel.app/hero-dog1.jpg",
+            address: {
+              "@type": "PostalAddress",
+              addressCountry: "FR",
+            },
+            areaServed: [
+              {
+                "@type": "Country",
+                name: "Cameroon",
+              },
+              {
+                "@type": "Country",
+                name: "France",
+              },
+              {
+                "@type": "Country",
+                name: "United States",
+              },
+            ],
+            sameAs: [
+              // "https://www.facebook.com/royalteckelhome",
+              "https://royal-teckel-home.vercel.app/",
+            ],
+          }),
+        }}
+      />
+
       <div
         className="fixed right-8 bottom-4 text-sm md:text-xl z-99 text-white/8 font-[Great_Vibes] select-none"
         style={{
